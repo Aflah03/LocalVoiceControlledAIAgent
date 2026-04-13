@@ -1,0 +1,12 @@
+# Speech-to-Text
+faster-whisper==1.0.3
+# LLM Interface
+ollama
+# UI
+gradio
+# Utilities
+pyaudio
+sounddevice
+numpy
+# Quality & Testing
+pytest
