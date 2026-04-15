@@ -12,9 +12,34 @@ Audio Input -> Whisper (STT) -> Llama 3.2 (Intent) -> Tool Executor -> Gradio UI
 - `tests/`: Layer-specific tests
 
 ## Setup
-Make sure python is installed in the system
-using a vitual python environment is recomended
-python 3.12 recomended
-1. Install Ollama and run `ollama pull llama3.2:3b`
-2. Install dependencies: `pip install -r requirements.txt`
-3. Run the app: `python app.py`
+Python 3.12 is recommended.
+
+1. **Create a virtual environment:**
+   ```bash
+   python -m venv venv
+   ```
+
+2. **Activate the virtual environment:**
+   - On Linux/macOS:
+     ```bash
+     source venv/bin/activate
+     ```
+   - On Windows:
+     ```bash
+     venv\Scripts\activate
+     ```
+
+3. **Install Ollama and pull the model:**
+   ```bash
+   ollama pull llama3.2:3b
+   ```
+
+4. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+5. **Run the app:**
+   ```bash
+   python app.py
+   ```
