@@ -19,7 +19,7 @@ def process_voice_input(audio_path):
     text = executor.stt.transcribe_file(audio_path)
 
     # Update UI with transcription immediately
-    yield text, "Identifying intents...", "Transcribing audio..."
+    yield text, "Identifying intents...", "Doing the work...."
 
     if not text:
         yield text, "[]", "No speech detected."
@@ -50,7 +50,7 @@ def list_output_files():
 # --- Gradio UI Layout ---
 with gr.Blocks(title="Local Voice AI Agent", theme=gr.themes.Soft()) as demo:
     gr.Markdown("# ️ Local Voice AI Agent")
-    gr.Markdown("Transcribe speech $\rightarrow$ Classify Intent $\rightarrow$ Execute Tools")
+    gr.Markdown("Transcribe speech -> Classify Intent -> rightarrow$ Execute Tools")
 
     with gr.Row():
         with gr.Column():

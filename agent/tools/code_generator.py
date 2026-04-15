@@ -26,11 +26,17 @@ class CodeGenerator:
         if not target_path.startswith(self.output_dir):
             return "Security Error: Attempted to write outside output directory."
 
-        prompt = f"Write only the source code for a {language} file that does the following: {description}. IMPORTANT: Follow the description strictly. Do not use placeholder names, fake data, or generic examples (like 'John Doe') if the user provided specific names or values. Do not include any explanations, markdown blocks, or preamble. Just the code."
+        prompt = f"Write only the source code for a {language} file that does the following: {description}. IMPORTANT: Follow the description strictly. Do not use placeholder names, fake data, or generic examples (like 'John Doe') if the user provided specific names or values. Do not include any explanations, markdown blocks (like ```python or ```), or preamble. Just the raw code."
 
         try:
             response = ollama.generate(model=self.model_name, prompt=prompt)
             code = response['response']
+
+            # Clean up any markdown code blocks that might slip through
+            import re
+            code = re.sub(r'^```[a-zA-Z]*\n', '', code)  # Remove opening ```
+            code = re.sub(r'\n```$', '', code)  # Remove closing ```
+            code = code.strip()
 
             with open(target_path, 'w') as f:
                 f.write(code)
