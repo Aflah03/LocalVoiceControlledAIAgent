@@ -8,20 +8,32 @@ executor = AgentExecutor()
 def process_voice_input(audio_path):
     """
     Gradio wrapper for the executor.
-    audio_path is provided by Gradio's microphone or file upload component.
+    Uses a generator to stream results to the UI.
     """
     if audio_path is None:
-        return "No audio provided.", "[]", "No execution log."
+        yield "No audio provided.", "[]", "No execution log."
+        return
 
-    # We treat Gradio audio as a file for the executor
-    # In a production app, we'd differentiate between live and upload
+    # 1. Transcription (STT)
+    # We manually call STT first to stream the text immediately
+    text = executor.stt.transcribe_file(audio_path)
+
+    # Update UI with transcription immediately
+    yield text, "Identifying intents...", "Transcribing audio..."
+
+    if not text:
+        yield text, "[]", "No speech detected."
+        return
+
+    # 2. Intent Classification & Execution
+    # We reuse the executor's logic but capture the progression
     result = executor.process_audio(audio_path, is_file=True)
 
     transcription = result["transcription"]
-    intents = result["intents"] # This is a list of dicts
+    intents = result["intents"]
     log = "\n".join(result["execution_log"])
 
-    return transcription, str(intents), log
+    yield transcription, str(intents), log
 
 def list_output_files():
     """Lists files in the output directory for the UI."""
@@ -36,13 +48,13 @@ def list_output_files():
     return "\n".join(files)
 
 # --- Gradio UI Layout ---
-with gr.Blocks(title="Mem0 Voice AI Agent", theme=gr.themes.Soft()) as demo:
-    gr.Markdown("# 🎙️ Mem0 Voice-Enabled AI Agent")
+with gr.Blocks(title="Local Voice AI Agent", theme=gr.themes.Soft()) as demo:
+    gr.Markdown("# ️ Local Voice AI Agent")
     gr.Markdown("Transcribe speech $\rightarrow$ Classify Intent $\rightarrow$ Execute Tools")
 
     with gr.Row():
         with gr.Column():
-            gr.Markdown("### 📥 Input")
+            gr.Markdown("###  Input")
             # Audio input supporting both upload and mic
             audio_input = gr.Audio(sources=["microphone", "upload"], type="filepath", label="Speak or Upload Audio")
             submit_btn = gr.Button("Process Voice Command", variant="primary")

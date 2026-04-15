@@ -4,7 +4,7 @@ import numpy as np
 import sounddevice as sd
 
 class STTHandler:
-    def __init__(self, model_size="base"):
+    def __init__(self, model_size="medium"):
         """
         Initializes the Whisper model.
         model_size options: "tiny", "base", "small", "medium", "large-v3"

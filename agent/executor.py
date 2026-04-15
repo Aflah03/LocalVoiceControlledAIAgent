@@ -4,6 +4,7 @@ from agent.tools.file_creator import FileCreator
 from agent.tools.code_generator import CodeGenerator
 from agent.tools.summarizer import Summarizer
 from agent.tools.chat_handler import ChatHandler
+from agent.tools.file_editor import FileEditor
 
 class AgentExecutor:
     def __init__(self):
@@ -18,9 +19,9 @@ class AgentExecutor:
 
         # Initialize tool suite
         self.tools = {
-
             "create_file": FileCreator(),
             "write_code": CodeGenerator(),
+            "edit_code": FileEditor(),
             "summarize_text": Summarizer(),
             "general_chat": ChatHandler()
         }

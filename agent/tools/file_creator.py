@@ -7,7 +7,11 @@ class FileCreator:
     def execute(self, params: dict) -> str:
         filename = params.get("filename")
         if not filename:
-            return "Error: No filename provided."
+            # Fallback: Use a timestamped generic name if the model failed to provide one
+            import datetime
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"file_{timestamp}.txt"
+            params["filename"] = filename
 
         # Security: Prevent path traversal
         target_path = os.path.abspath(os.path.join(self.output_dir, filename))
